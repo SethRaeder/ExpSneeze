@@ -149,6 +149,16 @@ namespace ExpSneeze
                             status.SneezeTime = 0f;
                             //Plugin.Logger.LogInfo("Done sneezing :3");
                         }
+
+                        if (UnityEngine.Random.Range(0f, 1f) < PlayerPrefs.GetFloat("ExpSneeze_Explode", 0f))
+                        {
+                            WorldGeneration.CreateExplosion(new ExplosionParams()
+                            {
+                                position = new Vector2(__instance.body.transform.position.x, __instance.body.transform.position.y)
+                            });
+                            status.Sneezing = false;
+                            status.SneezeTime = 0f;
+                        }
                     }
                 }
             }
@@ -200,6 +210,7 @@ namespace ExpSneeze
             Vector2 vector = (__instance.targetLookPos - __instance.limbs[1].transform.position).normalized;
             RaycastHit2D[] array = Physics2D.RaycastAll(__instance.limbs[1].transform.position, vector, atk.distance);
             bool flag = false;
+            bool flag2 = false;
             foreach (RaycastHit2D raycastHit2D in array)
             {
                 if (raycastHit2D.transform != __instance.transform)
@@ -207,6 +218,12 @@ namespace ExpSneeze
                     if (raycastHit2D.transform.CompareTag("BlockGround"))
                     {
                         flag = true;
+
+                        ushort blockId = WorldGeneration.world.GetBlock(WorldGeneration.world.WorldToBlockPos(raycastHit2D.point + vector * 0.05f));
+
+                        if (blockId == 2 || blockId == 4 || blockId == 12 || blockId == 16 || blockId == 23 || blockId == 25 || blockId == 31 || blockId == 32 || blockId == 33)
+                            flag2 = true;
+
                         break;
                     }
                 }
@@ -221,7 +238,14 @@ namespace ExpSneeze
                 }
                 else
                 {
-                    status.SneezeTime += atk.cooldown / 2f;
+                    if (flag2)
+                    {
+                        status.SneezeTime += atk.cooldown;
+                    }
+                    else
+                    {
+                        status.SneezeTime += atk.cooldown / 2f;
+                    }
                 }
                 if (status.SneezeTime > status.SneezeTimeMax - 5f) status.SneezeTime = status.SneezeTimeMax - 5f;
                 //Plugin.Logger.LogInfo($"SneezeTime: {status.SneezeTime}");

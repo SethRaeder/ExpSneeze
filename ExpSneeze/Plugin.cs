@@ -20,7 +20,7 @@ namespace ExpSneeze
     {
         public const string ModGUID = "lefty.expsneeze";
         public const string ModName = "ExpSneeze";
-        public const string ModVersion = "1.4.1";
+        public const string ModVersion = "1.5.1";
 
         internal static new ManualLogSource Logger;
         private readonly Harmony _harmony = new(ModGUID);
@@ -94,6 +94,21 @@ namespace ExpSneeze
                     PlayerPrefs.SetInt("ExpSneeze_Ragdoll", value ? 1 : 0);
                     PlayerPrefs.Save();
                 }
+            ));
+
+            ModOptionsRegistry.Register(ModOptionDefinition.Float("expsneeze.explode",
+                LocaleRegistry.Get("other", "gamesetexpsneeze.explode", "Explode on sneeze chance"),
+                LocaleRegistry.Get("other", "gamesetexpsneeze.explodedsc", "Chance that, when the player sneezes, they violently explode.\n<i>Joke setting. Please don't actually turn this on seriously.</i>"),
+                Setting.SettingCategory.Game,
+                PlayerPrefs.GetFloat("ExpSneeze_Explode", 0f),
+                0f,
+                1f,
+                value =>
+                {
+                    PlayerPrefs.SetFloat("ExpSneeze_Explode", value);
+                    PlayerPrefs.Save();
+                },
+                value => Mathf.RoundToInt(value * 100f) + "%"
             ));
 
             Logger.LogInfo($"Plugin {ModName} is loaded!");
