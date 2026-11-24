@@ -40,7 +40,7 @@
     </Reference>
 
     <Reference Include="CUCoreLib">
-      <HintPath>..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Casualties Unknown Demo\BepInEx\plugins\CUCoreLib.dll</HintPath>
+      <HintPath>E:\SteamGames\steamapps\common\Casualties Unknown\BepInEx\plugins\CUCoreLib.dll</HintPath>
     </Reference>
 
     <Reference Include="UnityEngine.UI">
